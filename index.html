@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>雪梨數位遊牧行程表</title>
+<meta name="description" content="9/3–9/12 雪梨數位遊牧：平日 12:00–21:00 遠端工作，早晨與夜晚探索雪梨的十日行程表。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap">
+<style>
+/* ---------- tokens ---------- */
+:root{
+  --paper:#EDEFEA;
+  --surface:#F8F9F6;
+  --surface-2:#E3E7E0;
+  --ink:#0F262B;
+  --ink-2:#3D5257;
+  --ink-3:#6B7F83;
+  --rule:#CBD2CB;
+  --rule-soft:#DDE2DB;
+  --ferry:#04624B;
+  --ferry-soft:#DCE9E2;
+  --gold:#B07D08;
+  --gold-soft:#F0E4C6;
+  --dusk:#5B4A8A;
+  --dusk-soft:#E2DDEE;
+  --shadow:0 1px 2px rgba(15,38,43,.06), 0 8px 24px -14px rgba(15,38,43,.22);
+
+  --f-display:"Noto Serif TC", "Songti TC", serif;
+  --f-body:"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --f-label:"IBM Plex Sans", "Noto Sans TC", system-ui, sans-serif;
+
+  --maxw:1180px;
+  --rail:172px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0A1518;
+    --surface:#102126;
+    --surface-2:#182F34;
+    --ink:#E6ECE8;
+    --ink-2:#AFC0C0;
+    --ink-3:#7C9295;
+    --rule:#254045;
+    --rule-soft:#1B3238;
+    --ferry:#4FC3A1;
+    --ferry-soft:#123830;
+    --gold:#E7B23F;
+    --gold-soft:#3A2E10;
+    --dusk:#A794E0;
+    --dusk-soft:#2A2444;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 30px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0A1518;
+  --surface:#102126;
+  --surface-2:#182F34;
+  --ink:#E6ECE8;
+  --ink-2:#AFC0C0;
+  --ink-3:#7C9295;
+  --rule:#254045;
+  --rule-soft:#1B3238;
+  --ferry:#4FC3A1;
+  --ferry-soft:#123830;
+  --gold:#E7B23F;
+  --gold-soft:#3A2E10;
+  --dusk:#A794E0;
+  --dusk-soft:#2A2444;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 30px -18px rgba(0,0,0,.8);
+}
+
+/* ---------- base ---------- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:1.5rem}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:15px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--f-display); font-weight:900; text-wrap:balance; margin:0; line-height:1.2}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ferry); outline-offset:3px; border-radius:2px}
+.mono{font-family:var(--f-mono); font-variant-numeric:tabular-nums}
+.label{
+  font-family:var(--f-label); font-size:.6875rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+
+/* ---------- masthead ---------- */
+.masthead{
+  border-bottom:1px solid var(--rule);
+  background:
+    radial-gradient(1200px 320px at 82% -40%, var(--ferry-soft), transparent 70%),
+    var(--surface);
+}
+.masthead .wrap{padding-top:56px; padding-bottom:38px}
+.eyebrow{display:flex; align-items:center; gap:12px; margin-bottom:22px}
+.eyebrow .dash{height:1px; width:46px; background:var(--ferry); opacity:.65}
+h1{font-size:clamp(2.5rem, 6.5vw, 4.25rem); letter-spacing:.01em}
+h1 .thin{display:block; font-size:.42em; font-weight:600; letter-spacing:.24em; color:var(--ferry); margin-bottom:.55em}
+.daterange{
+  margin-top:18px; font-family:var(--f-mono); font-size:clamp(.9rem,2.4vw,1.05rem);
+  color:var(--ink-2); letter-spacing:.02em;
+}
+.daterange b{color:var(--ink); font-weight:600}
+
+.stats{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+  margin-top:34px; background:var(--rule-soft);
+  border:1px solid var(--rule-soft); border-radius:3px; overflow:hidden;
+}
+.stat{background:var(--surface); padding:14px 16px}
+.stat .n{font-family:var(--f-mono); font-size:1.6rem; font-weight:500; line-height:1.1; letter-spacing:-.02em}
+.stat .t{font-size:.78rem; color:var(--ink-3); margin-top:2px}
+.stat:nth-child(2) .n{color:var(--gold)}
+.stat:nth-child(3) .n{color:var(--ferry)}
+
+/* ---------- boarding passes ---------- */
+.flights{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:34px}
+.pass{
+  background:var(--surface); border:1px solid var(--rule);
+  border-radius:4px; box-shadow:var(--shadow); position:relative; overflow:hidden;
+  display:grid; grid-template-columns:1fr auto; align-items:stretch;
+}
+.pass::before{
+  content:""; position:absolute; inset:0 auto 0 0; width:4px;
+  background:var(--ferry);
+}
+.pass.ret::before{background:var(--dusk)}
+.pass-main{padding:16px 18px 16px 22px}
+.pass-code{font-family:var(--f-mono); font-size:1.05rem; font-weight:600; letter-spacing:.06em}
+.pass-route{display:flex; align-items:baseline; gap:10px; margin-top:12px; flex-wrap:wrap}
+.port{font-family:var(--f-mono); font-size:1.5rem; font-weight:500; letter-spacing:.04em}
+.arrow{color:var(--ink-3); font-size:1rem}
+.pass-times{margin-top:8px; font-family:var(--f-mono); font-size:.82rem; color:var(--ink-2)}
+.pass-stub{
+  border-left:1px dashed var(--rule); padding:16px 16px; min-width:104px;
+  display:flex; flex-direction:column; justify-content:center; gap:3px; text-align:right;
+  background:linear-gradient(180deg, transparent, var(--surface-2));
+}
+.pass-stub .d{font-family:var(--f-mono); font-size:1.1rem; font-weight:500}
+.pass-stub .w{font-size:.72rem; color:var(--ink-3)}
+
+/* ---------- work window note ---------- */
+.tznote{
+  margin-top:22px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px;
+  padding:13px 16px; border:1px dashed var(--rule); border-radius:4px;
+  background:repeating-linear-gradient(135deg, transparent 0 7px, var(--gold-soft) 7px 8px);
+}
+.tznote .k{font-family:var(--f-mono); font-size:.9rem; font-weight:500}
+.tznote .sep{color:var(--ink-3)}
+.tznote .txt{font-size:.85rem; color:var(--ink-2)}
+
+/* ---------- overview gantt ---------- */
+.section{padding:56px 0}
+.section-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px}
+h2{font-size:1.5rem}
+.legend{display:flex; flex-wrap:wrap; gap:14px}
+.lg{display:flex; align-items:center; gap:7px; font-size:.78rem; color:var(--ink-2)}
+.sw{width:15px; height:9px; border-radius:2px; flex:none}
+.sw.sight{background:var(--ferry)}
+.sw.work{background:var(--gold); background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.45) 0 2px, transparent 2px 5px)}
+.sw.night{background:var(--dusk)}
+.sw.transit{background:transparent; border:1px dashed var(--ink-3)}
+
+.chart{
+  background:var(--surface); border:1px solid var(--rule); border-radius:4px;
+  padding:16px 18px 12px; box-shadow:var(--shadow); overflow-x:auto;
+}
+.chart-inner{min-width:640px}
+.axis{display:grid; grid-template-columns:var(--rail) minmax(0,1fr); align-items:end; margin-bottom:8px}
+.axis-track{position:relative; height:16px}
+.tick{position:absolute; top:0; font-family:var(--f-mono); font-size:.68rem; color:var(--ink-3); transform:translateX(-50%)}
+.grow{display:grid; grid-template-columns:var(--rail) minmax(0,1fr); align-items:center; border-top:1px solid var(--rule-soft)}
+.grow:hover{background:var(--surface-2)}
+.gday{display:flex; align-items:center; gap:9px; padding:0 12px 0 2px; font-size:.8rem; white-space:nowrap}
+.gday .dt{font-family:var(--f-mono); font-weight:500}
+.gday .dw{color:var(--ink-3); font-size:.72rem}
+.gday .k{
+  margin-left:auto; font-family:var(--f-label); font-size:.62rem; font-weight:600;
+  letter-spacing:.08em; padding:1px 6px; border-radius:2px;
+}
+.k.work{background:var(--gold-soft); color:var(--gold)}
+.k.off{background:var(--ferry-soft); color:var(--ferry)}
+.k.fly{background:var(--surface-2); color:var(--ink-3)}
+.gtrack{position:relative; height:34px; border-left:1px solid var(--rule-soft)}
+.gtrack::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:var(--gridlines,none);
+  opacity:.75;
+}
+.bar{position:absolute; top:10px; height:14px; border-radius:2px}
+.bar.sight{background:var(--ferry)}
+.bar.night{background:var(--dusk)}
+.bar.work{background:var(--gold); background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.42) 0 2px, transparent 2px 5px)}
+.bar.transit{background:transparent; border:1px dashed var(--ink-3)}
+.bar.open{border-top-right-radius:0; border-bottom-right-radius:0; -webkit-mask-image:linear-gradient(90deg,#000 72%,transparent); mask-image:linear-gradient(90deg,#000 72%,transparent)}
+
+/* ---------- layout: rail + days ---------- */
+.body-grid{display:grid; grid-template-columns:186px minmax(0,1fr); gap:40px; align-items:start}
+.body-grid > *{min-width:0}
+.rail ol{min-width:0}
+.rail{position:sticky; top:24px}
+.rail .label{margin-bottom:12px}
+.rail ol{list-style:none; margin:0; padding:0; border-left:1px solid var(--rule)}
+.rail a{
+  display:grid; grid-template-columns:auto 1fr; align-items:baseline; gap:8px;
+  padding:6px 10px; margin-left:-1px; border-left:2px solid transparent;
+  text-decoration:none; color:var(--ink-2); font-size:.82rem;
+}
+.rail a:hover{color:var(--ink); background:var(--surface)}
+.rail a.on{border-left-color:var(--ferry); color:var(--ink); font-weight:500}
+.rail .rd{font-family:var(--f-mono); font-size:.76rem; color:var(--ink-3)}
+.rail a.on .rd{color:var(--ferry)}
+
+/* ---------- day cards ---------- */
+.days{display:flex; flex-direction:column; gap:26px; min-width:0}
+.day{
+  min-width:0;
+  background:var(--surface); border:1px solid var(--rule); border-radius:4px;
+  box-shadow:var(--shadow); scroll-margin-top:20px;
+  opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s ease;
+}
+.day.in{opacity:1; transform:none}
+.day-head{
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  padding:16px 22px; border-bottom:1px solid var(--rule-soft);
+}
+.day-no{
+  font-family:var(--f-mono); font-size:.72rem; font-weight:600; color:var(--ink-3);
+  border:1px solid var(--rule); border-radius:2px; padding:2px 6px; letter-spacing:.06em;
+}
+.day-date{font-family:var(--f-mono); font-size:1.15rem; font-weight:600; letter-spacing:.02em}
+.day-dow{color:var(--ink-3); font-size:.85rem}
+.day-title{font-family:var(--f-display); font-weight:600; font-size:1.02rem; margin-left:2px; min-width:0}
+.badge{
+  margin-left:auto; font-family:var(--f-label); font-size:.68rem; font-weight:600;
+  letter-spacing:.1em; padding:3px 9px; border-radius:2px; white-space:nowrap;
+}
+.badge.work{background:var(--gold-soft); color:var(--gold)}
+.badge.off{background:var(--ferry-soft); color:var(--ferry)}
+.badge.fly{background:var(--surface-2); color:var(--ink-2)}
+
+.items{list-style:none; margin:0; padding:6px 22px 20px}
+.item{display:grid; grid-template-columns:88px minmax(0,1fr); gap:18px; padding:14px 0; position:relative}
+.item + .item{border-top:1px solid var(--rule-soft)}
+.itime{font-family:var(--f-mono); font-size:.8rem; font-variant-numeric:tabular-nums; color:var(--ink-2); padding-top:2px; line-height:1.5}
+.itime .to{display:block; color:var(--ink-3)}
+.ibody{border-left:2px solid var(--rule-soft); padding-left:16px; min-width:0; overflow-wrap:anywhere}
+.item.sight .ibody{border-left-color:var(--ferry)}
+.item.work .ibody{border-left-color:var(--gold)}
+.item.night .ibody{border-left-color:var(--dusk)}
+.item.transit .ibody{border-left-color:var(--ink-3); border-left-style:dashed}
+.ititle{font-weight:700; font-size:1rem; letter-spacing:.01em; display:flex; align-items:center; gap:9px; flex-wrap:wrap}
+.cat{
+  font-family:var(--f-label); font-size:.63rem; font-weight:600; letter-spacing:.1em;
+  padding:1px 6px; border-radius:2px;
+}
+.item.sight .cat{background:var(--ferry-soft); color:var(--ferry)}
+.item.work .cat{background:var(--gold-soft); color:var(--gold)}
+.item.night .cat{background:var(--dusk-soft); color:var(--dusk)}
+.item.transit .cat{background:var(--surface-2); color:var(--ink-3)}
+.idesc{color:var(--ink-2); font-size:.9rem; margin-top:4px}
+.tips{list-style:none; margin:9px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:6px 8px}
+.tips li{
+  font-size:.76rem; color:var(--ink-2); font-family:var(--f-mono);
+  border:1px solid var(--rule); border-radius:2px; padding:1px 7px; background:var(--paper);
+}
+.day-foot{
+  padding:11px 22px; border-top:1px solid var(--rule-soft); background:var(--paper);
+  font-size:.82rem; color:var(--ink-3); display:flex; gap:8px; align-items:baseline;
+}
+.day-foot .label{color:var(--ink-3)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--rule); background:var(--surface); margin-top:20px}
+footer .wrap{padding-top:40px; padding-bottom:56px}
+.notes{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:26px; margin-top:20px}
+.note h3{font-family:var(--f-display); font-weight:600; font-size:.98rem; margin-bottom:7px}
+.note p{font-size:.86rem; color:var(--ink-2)}
+.colophon{margin-top:36px; padding-top:18px; border-top:1px solid var(--rule-soft); font-size:.78rem; color:var(--ink-3)}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .body-grid{grid-template-columns:1fr; gap:22px}
+  .rail{position:static}
+  .rail ol{display:flex; gap:6px; overflow-x:auto; border-left:0; border-bottom:1px solid var(--rule); padding-bottom:8px}
+  .rail li{flex:none}
+  .rail a{border-left:0; border-bottom:2px solid transparent; margin-left:0; padding:5px 9px; gap:6px}
+  .rail a.on{border-left-color:transparent; border-bottom-color:var(--ferry)}
+  .flights{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:560px){
+  .wrap{padding:0 18px}
+  .item{grid-template-columns:1fr; gap:6px}
+  .itime{display:flex; gap:8px; padding-top:0}
+  .itime .to{display:inline}
+  .ibody{padding-left:13px}
+  .day-head{gap:9px; padding:14px 16px}
+  .items{padding:4px 16px 16px}
+  .badge{margin-left:0}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .day{opacity:1; transform:none; transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dash"></span><span class="label">Digital Nomad · Sydney 2025</span></div>
+    <h1><span class="thin">遠端工作 × 城市探索</span>雪梨數位遊牧行程表</h1>
+    <p class="daterange"><b>9/3 (四) — 9/12 (六)</b> &nbsp;·&nbsp; 10 天 9 夜 &nbsp;·&nbsp; 台灣／吉隆坡 +2 小時時差</p>
+
+    <div class="stats">
+      <div class="stat"><div class="n">10</div><div class="t">總天數</div></div>
+      <div class="stat"><div class="n">6</div><div class="t">遠端工作日</div></div>
+      <div class="stat"><div class="n">2</div><div class="t">全日放假</div></div>
+      <div class="stat"><div class="n">9h</div><div class="t">每日工作時數</div></div>
+    </div>
+
+    <div class="flights">
+      <div class="pass">
+        <div class="pass-main">
+          <div class="pass-code">OD121 · 去程</div>
+          <div class="pass-route"><span class="port">TPE</span><span class="arrow">✈</span><span class="port">SYD</span></div>
+          <div class="pass-times">19:55 起飛 → 隔日 06:15 抵達 · 夜航直飛</div>
+        </div>
+        <div class="pass-stub"><div class="d">09/03</div><div class="w">週四 出發</div></div>
+      </div>
+      <div class="pass ret">
+        <div class="pass-main">
+          <div class="pass-code">OD120 · 回程</div>
+          <div class="pass-route"><span class="port">SYD</span><span class="arrow">✈</span><span class="port">KUL</span></div>
+          <div class="pass-times">08:35 起飛 → 15:40 抵達吉隆坡 · 早班機</div>
+        </div>
+        <div class="pass-stub"><div class="d">09/12</div><div class="w">週六 返航</div></div>
+      </div>
+    </div>
+
+    <div class="tznote">
+      <span class="k">台灣／吉隆坡 10:00–19:00</span>
+      <span class="sep">→</span>
+      <span class="k" style="color:var(--gold)">雪梨 12:00–21:00</span>
+      <span class="txt">週一至週五固定工作時段，早上與深夜全部留給雪梨。</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section wrap" aria-labelledby="overview-h">
+    <div class="section-head">
+      <h2 id="overview-h">十日一覽</h2>
+      <div class="legend">
+        <span class="lg"><span class="sw sight"></span>晨間觀光</span>
+        <span class="lg"><span class="sw work"></span>遠端工作</span>
+        <span class="lg"><span class="sw night"></span>晚餐／夜生活</span>
+        <span class="lg"><span class="sw transit"></span>交通／航班</span>
+      </div>
+    </div>
+    <div class="chart">
+      <div class="chart-inner">
+        <div class="axis">
+          <div></div>
+          <div class="axis-track" id="axis"></div>
+        </div>
+        <div id="gantt"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="days-h">
+    <div class="section-head"><h2 id="days-h">每日行程</h2></div>
+    <div class="body-grid">
+      <nav class="rail" aria-label="日期導覽">
+        <div class="label">Jump to day</div>
+        <ol id="rail"></ol>
+      </nav>
+      <div class="days" id="days"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="label">行前備忘</div>
+    <div class="notes">
+      <div class="note">
+        <h3>需要預約的兩件事</h3>
+        <p>9/5 雪梨歌劇院中文導覽梯次，以及 9/6 藍山 Scenic World 纜車票，建議出發前線上訂好；Featherdale 的袋鼠飼料現場買即可。</p>
+      </div>
+      <div class="note">
+        <h3>開門時間決定早晨路線</h3>
+        <p>Featherdale 08:00、QVB 09:00、Hyde Park Barracks 與 NSW 美術館 10:00。晨間觀光排在 08:30 出門剛好銜接。</p>
+      </div>
+      <div class="note">
+        <h3>交通</h3>
+        <p>感應式信用卡即可刷 Opal 系統，火車、渡輪、公車通用。機場線 T1 直達市區；Circular Quay 的渡輪本身就是最好的觀景行程。</p>
+      </div>
+      <div class="note">
+        <h3>回程當天</h3>
+        <p>9/12 需在 06:00 前抵達 T1，前一晚（9/11 工作結束後）務必打包完成，早晨只留退房與交通時間。</p>
+      </div>
+    </div>
+    <p class="colophon">時間為雪梨當地時間（AEST, UTC+10）。工作時段以外的行程為彈性安排，可依天氣與體力調整。</p>
+  </div>
+</footer>
+
+<script>
+const START = 5, END = 24; // chart hours
+const CAT = { sight:"晨間觀光", work:"遠端工作", night:"晚餐／夜生活", transit:"交通" };
+
+const DAYS = [
+  { d:"09/03", dow:"週四", kind:"fly", badge:"出發日", title:"搭機出發",
+    foot:"夜航睡飽，隔天早上直接開始行程。",
+    items:[
+      { s:"19:55", e:"24:00", open:true, cat:"transit", time:"19:55",
+        t:"OD121 直飛雪梨",
+        d:"晚間起飛的夜航班機，機上休息，隔日清晨抵達。" }
+    ]},
+
+  { d:"09/04", dow:"週五", kind:"work", badge:"工作日 1", title:"抵達安頓 · 岩石區初見面",
+    foot:"落地即開工的一天，早上先把最經典的港灣看完。",
+    items:[
+      { s:"06:15", e:"08:30", cat:"transit", time:"06:15", to:"08:30",
+        t:"抵達雪梨機場 T1 · 寄放行李",
+        d:"入境後搭機場線火車進市區，先到 Airbnb 寄放行李、整理裝備。",
+        tips:["Opal 感應支付","機場線約 15 分鐘"] },
+      { s:"09:00", e:"11:30", cat:"sight", time:"09:00", to:"11:30",
+        t:"岩石區 The Rocks 與雪梨歌劇院外圍",
+        d:"漫步殖民時期的歷史巷弄與砂岩老屋，再走到歌劇院外圍拍第一組照片。" },
+      { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
+        t:"遠端工作",
+        d:"房內專注辦公與線上會議，對應台灣時間 10:00–19:00。" },
+      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
+        t:"達令港 Darling Harbour 水岸晚餐",
+        d:"收工後步行到水岸餐廳吃第一頓正式晚餐，看港邊夜景。" }
+    ]},
+
+  { d:"09/05", dow:"週六", kind:"off", badge:"放假日 1", title:"歌劇院導覽 · 市集 · 海岸線",
+    foot:"整天不開電腦，從室內導覽一路玩到海邊。",
+    items:[
+      { s:"09:30", e:"11:00", cat:"sight", time:"09:30", to:"11:00",
+        t:"雪梨歌劇院內部導覽",
+        d:"預約中文梯次，走進音樂廳與後台，理解那組帆形屋頂是怎麼蓋起來的。",
+        tips:["需事先線上預約","中文梯次"] },
+      { s:"11:00", e:"12:30", cat:"sight", time:"11:00", to:"12:30",
+        t:"The Rocks Markets 週末市集",
+        d:"逛週末手作市集，順路鑽進幾間百年古蹟酒吧。" },
+      { s:"13:00", e:"17:30", cat:"sight", time:"13:00", to:"17:30",
+        t:"Circular Quay 渡輪 → Manly Beach",
+        d:"搭渡輪橫越雪梨港，在 Manly 沿海散步、吃招牌炸魚薯條，找間海景 Cafe 喝咖啡看海。",
+        tips:["渡輪約 30 分鐘","去程坐右舷看歌劇院"] },
+      { s:"18:30", e:"21:00", cat:"night", time:"18:30 起",
+        t:"Chinatown / Haymarket 熱炒宵夜",
+        d:"回市區補一頓亞洲胃的熱炒或宵夜。" }
+    ]},
+
+  { d:"09/06", dow:"週日", kind:"off", badge:"放假日 2", title:"藍山世界遺產 · 親手餵袋鼠",
+    foot:"全天遠郊 08:00–17:30，回程前把體力留給牛排。",
+    items:[
+      { s:"08:00", e:"10:00", cat:"sight", time:"08:00", to:"10:00",
+        t:"第一站：Featherdale Wildlife Park",
+        d:"08:00 一開門就進場，買飼料親手餵袋鼠，近距離看無尾熊，避開團客人潮。",
+        tips:["08:00 開門","飼料現場購買"] },
+      { s:"10:00", e:"17:30", cat:"sight", time:"10:00", to:"17:30",
+        t:"第二站：藍山國家公園 Blue Mountains",
+        d:"世界遺產等級的峽谷景觀，看三姐妹岩，搭 Scenic World 的高空纜車、斜坡鐵路與森林纜車三種路線。",
+        tips:["Scenic World 建議預訂","山上溫差大帶外套"] },
+      { s:"18:30", e:"21:00", cat:"night", time:"18:30 起",
+        t:"市區高檔澳洲牛排",
+        d:"回到市區犒賞自己一份澳洲和牛或草飼牛排。" }
+    ]},
+
+  { d:"09/07", dow:"週一", kind:"work", badge:"工作日 2", title:"海德公園、植物園與囚犯營房",
+    foot:"純步行路線，全程集中在 CBD 東側。",
+    items:[
+      { s:"08:30", e:"10:00", cat:"sight", time:"08:30", to:"10:00",
+        t:"海德公園 · 聖瑪麗大教堂 · 皇家植物園",
+        d:"一路散步到 Mrs Macquarie's Chair，那裡是拍歌劇院與港灣大橋同框全景的最佳位置。" },
+      { s:"10:00", e:"11:15", cat:"sight", time:"10:00", to:"11:15",
+        t:"Hyde Park Barracks 海德公園營房",
+        d:"世界遺產的囚犯營房博物館，用聲音導覽體驗殖民與流放歷史。",
+        tips:["10:00 開門"] },
+      { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
+        t:"遠端工作",
+        d:"房內專注辦公。" },
+      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
+        t:"唐人街 / Haymarket 宵夜",
+        d:"亞洲料理或熱炒收尾。" }
+    ]},
+
+  { d:"09/08", dow:"週二", kind:"work", badge:"工作日 3", title:"邦代海灘與懸崖海景 Brunch",
+    foot:"公車直達，早餐吃在懸崖邊。",
+    items:[
+      { s:"08:30", e:"11:30", cat:"sight", time:"08:30", to:"11:30",
+        t:"Bondi Beach 邦代海灘",
+        d:"搭公車直達，在 Icebergs Dining Room 或 Speedos Cafe 吃懸崖海景 Brunch，再走一段 Bondi to Bronte 海岸步道。",
+        tips:["Icebergs 建議訂位","海岸步道單程約 1 小時"] },
+      { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
+        t:"遠端工作",
+        d:"房內專注辦公與線上會議。" },
+      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
+        t:"Surry Hills 地下酒吧",
+        d:"到 The Baxter Inn 這類藏在巷弄地下室的威士忌吧小酌。" }
+    ]},
+
+  { d:"09/09", dow:"週三", kind:"work", badge:"工作日 4", title:"文青 Paddington 與精品咖啡",
+    foot:"雪梨咖啡文化的主場，早上先補一杯好的。",
+    items:[
+      { s:"08:30", e:"11:30", cat:"sight", time:"08:30", to:"11:30",
+        t:"Paddington 街區與 Single O 咖啡",
+        d:"欣賞成排維多利亞式排屋與鑄鐵陽台，在 Single O 喝一杯雪梨精品咖啡代表作。" },
+      { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
+        t:"遠端工作",
+        d:"房內專注辦公。" },
+      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
+        t:"Barangaroo 水岸餐酒館",
+        d:"新開發的港區餐酒館區，適合晚一點的一頓好晚餐。" }
+    ]},
+
+  { d:"09/10", dow:"週四", kind:"work", badge:"工作日 5", title:"當代藝術與 QVB 購物",
+    foot:"室內行程日，剛好躲雨也不怕。",
+    items:[
+      { s:"08:30", e:"10:00", cat:"sight", time:"08:30", to:"10:00",
+        t:"維多利亞女王大廈 QVB",
+        d:"百年羅曼式建築本身就值得一看，順道採買 Aesop 等伴手禮。",
+        tips:["店家 09:00 開門"] },
+      { s:"10:00", e:"11:15", cat:"sight", time:"10:00", to:"11:15",
+        t:"新南威爾斯美術館 Art Gallery of NSW",
+        d:"參觀 2022 年落成的新館 Naala Badu，館藏與建築都很值得。",
+        tips:["10:00 開門","常設展免費"] },
+      { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
+        t:"遠端工作",
+        d:"房內專注辦公。" },
+      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
+        t:"岩石區古蹟酒吧",
+        d:"在雪梨最老的幾間酒吧裡喝一輪本地精釀。" }
+    ]},
+
+  { d:"09/11", dow:"週五", kind:"work", badge:"工作日 6", title:"現剖生蠔海鮮大餐 · 最後一天",
+    foot:"工作結束後先打包，隔天早上只剩退房。",
+    items:[
+      { s:"08:30", e:"11:30", cat:"sight", time:"08:30", to:"11:30",
+        t:"雪梨魚市場 Sydney Fish Market",
+        d:"把早餐吃成海鮮大餐：現剖生蠔、黑金鮑魚與龍蝦，南半球最大魚市場的日常。" },
+      { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
+        t:"遠端工作 · 收尾與打包",
+        d:"完成本週最後一天遠端工作，收工後隨即打包行李。" },
+      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
+        t:"O Bar and Dining 高空酒吧",
+        d:"在旋轉高空酒吧喝杯調酒，用 360 度夜景慶祝完成雪梨數位遊牧。",
+        tips:["建議訂位"] }
+    ]},
+
+  { d:"09/12", dow:"週六", kind:"fly", badge:"返航日", title:"早班機返航",
+    foot:"05:30 退房，行程結束。",
+    items:[
+      { s:"05:30", e:"06:00", cat:"transit", time:"05:30", to:"06:00",
+        t:"退房 · 前往雪梨機場 T1",
+        d:"搭火車或 Uber，需在 06:00 前抵達 T1 辦理登機。",
+        tips:["清晨班次較少，建議 Uber"] },
+      { s:"08:35", e:"24:00", open:true, cat:"transit", time:"08:35",
+        t:"OD120 返航吉隆坡",
+        d:"08:35 起飛，15:40 抵達吉隆坡，順利結束十日行程。" }
+    ]}
+];
+
+const hm = t => { const [h,m] = t.split(":").map(Number); return h + m/60; };
+const pct = h => ((h - START) / (END - START)) * 100;
+
+/* axis + matching gridlines */
+const TICKS = [6,9,12,15,18,21,24];
+const axis = document.getElementById("axis");
+TICKS.forEach(h => {
+  const el = document.createElement("span");
+  el.className = "tick";
+  el.style.left = pct(h) + "%";
+  el.textContent = h === 24 ? "24" : String(h).padStart(2,"0");
+  axis.appendChild(el);
+});
+document.documentElement.style.setProperty("--gridlines",
+  "linear-gradient(90deg," + TICKS.slice(0, -1).map(h => {
+    const p = pct(h).toFixed(3) + "%";
+    return `transparent ${p}, var(--rule-soft) ${p}, var(--rule-soft) calc(${p} + 1px), transparent calc(${p} + 1px)`;
+  }).join(",") + ")");
+
+/* gantt */
+const gantt = document.getElementById("gantt");
+const kindLabel = { work:"工作", off:"放假", fly:"航班" };
+DAYS.forEach(day => {
+  const row = document.createElement("div");
+  row.className = "grow";
+  const bars = day.items.map(i => {
+    const l = pct(hm(i.s)), w = pct(hm(i.e)) - l;
+    return `<span class="bar ${i.cat}${i.open ? " open" : ""}" style="left:${l}%;width:${w}%"
+            title="${i.time} ${i.t}"></span>`;
+  }).join("");
+  row.innerHTML =
+    `<div class="gday"><span class="dt">${day.d}</span><span class="dw">${day.dow}</span>
+       <span class="k ${day.kind}">${kindLabel[day.kind]}</span></div>
+     <div class="gtrack">${bars}</div>`;
+  gantt.appendChild(row);
+});
+
+/* rail + day cards */
+const rail = document.getElementById("rail");
+const days = document.getElementById("days");
+DAYS.forEach((day, idx) => {
+  const id = "day-" + (idx + 1);
+
+  const li = document.createElement("li");
+  li.innerHTML = `<a href="#${id}" data-target="${id}"><span class="rd">${day.d}</span><span>${day.dow}</span></a>`;
+  rail.appendChild(li);
+
+  const items = day.items.map(i => `
+    <li class="item ${i.cat}">
+      <div class="itime">${i.time}${i.to ? `<span class="to">– ${i.to}</span>` : ""}</div>
+      <div class="ibody">
+        <div class="ititle">${i.t}<span class="cat">${CAT[i.cat]}</span></div>
+        <p class="idesc">${i.d}</p>
+        ${i.tips ? `<ul class="tips">${i.tips.map(t => `<li>${t}</li>`).join("")}</ul>` : ""}
+      </div>
+    </li>`).join("");
+
+  const sec = document.createElement("article");
+  sec.className = "day";
+  sec.id = id;
+  sec.innerHTML = `
+    <div class="day-head">
+      <span class="day-no">D${idx + 1}</span>
+      <span class="day-date">${day.d}</span>
+      <span class="day-dow">${day.dow}</span>
+      <span class="day-title">${day.title}</span>
+      <span class="badge ${day.kind}">${day.badge}</span>
+    </div>
+    <ul class="items">${items}</ul>
+    <div class="day-foot"><span class="label">Note</span><span>${day.foot}</span></div>`;
+  days.appendChild(sec);
+});
+
+/* reveal + scrollspy */
+const cards = [...document.querySelectorAll(".day")];
+const links = [...rail.querySelectorAll("a")];
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (reduce || !("IntersectionObserver" in window)) {
+  cards.forEach(c => c.classList.add("in"));
+} else {
+  const reveal = new IntersectionObserver((es, o) => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); o.unobserve(e.target); } });
+  }, { rootMargin: "0px 0px -8% 0px" });
+  cards.forEach(c => reveal.observe(c));
+}
+
+const spy = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (!e.isIntersecting) return;
+    links.forEach(a => a.classList.toggle("on", a.dataset.target === e.target.id));
+  });
+}, { rootMargin: "-15% 0px -70% 0px" });
+cards.forEach(c => spy.observe(c));
+</script>
+</body>
+</html>
