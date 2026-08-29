@@ -25,4 +25,9 @@ python3 -m http.server 8000   # 然後開啟 http://localhost:8000
 
 時間皆為雪梨當地時間（AEST, UTC+10）。
 
-網站透過 `.github/workflows/deploy-pages.yml` 自動部署：推送到 `main` 時建置並發佈至 GitHub Pages（Settings → Pages → Source 需設為 **GitHub Actions**）。
+網站透過 `.github/workflows/deploy-pages.yml` 自動部署：推送到 `main` 時發佈至 GitHub Pages。
+
+首次部署前需手動開啟一次（Actions 的預設 token 無權建立 Pages 站台）：
+**Settings → Pages → Build and deployment → Source 選 `GitHub Actions`**，
+之後到 Actions 頁面重跑 Deploy to GitHub Pages，網站即上線於
+<https://l0ui3.github.io/sydney-travel/>。

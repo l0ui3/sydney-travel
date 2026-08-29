@@ -24,10 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Requires Settings -> Pages -> Source: "GitHub Actions" (one-time, manual:
+      # the default GITHUB_TOKEN is not permitted to create the Pages site).
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
