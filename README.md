@@ -24,3 +24,5 @@ python3 -m http.server 8000   # 然後開啟 http://localhost:8000
 任何靜態網站主機皆可（GitHub Pages、Netlify、Cloudflare Pages）；只需 `index.html` 一個檔案。網頁字型來自 Google Fonts，需要對外連線。
 
 時間皆為雪梨當地時間（AEST, UTC+10）。
+
+網站透過 `.github/workflows/deploy-pages.yml` 自動部署：推送到 `main` 時建置並發佈至 GitHub Pages（Settings → Pages → Source 需設為 **GitHub Actions**）。
