@@ -101,6 +101,7 @@ p{margin:0}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--ferry); outline-offset:3px; border-radius:2px}
 .mono{font-family:var(--f-mono); font-variant-numeric:tabular-nums}
+.seg{display:inline-block} /* CJK word-boundary hint: lines may break between .seg spans, never inside */
 .label{
   font-family:var(--f-label); font-size:.6875rem; font-weight:600;
   letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
@@ -407,7 +408,7 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
     <div class="eyebrow"><span class="dash"></span><span class="label">Digital Nomad · Sydney 2026</span>
       <button id="theme-btn" class="theme-btn" type="button" aria-label="切換深淺色模式">🌓 自動</button>
     </div>
-    <h1><span class="thin">遠端工作 × 城市探索</span>雪梨數位遊牧行程表</h1>
+    <h1><span class="thin">遠端工作 × 城市探索</span><span class="seg">雪梨</span><span class="seg">數位遊牧</span><span class="seg">行程表</span></h1>
     <p class="daterange"><b>9/3 (四) — 9/12 (六)</b> &nbsp;·&nbsp; 10 天 9 夜 &nbsp;·&nbsp; 住宿 33 Ultimo Rd（Haymarket）&nbsp;·&nbsp; 吉隆坡 +2 小時時差</p>
 
     <div class="stats">
@@ -422,7 +423,7 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
         <div class="pass-main">
           <div class="pass-code">OD121 · 去程</div>
           <div class="pass-route"><span class="port">KUL</span><span class="arrow">✈</span><span class="port">SYD</span></div>
-          <div class="pass-times">19:55 起飛 → 隔日 06:15 抵達 · 夜航直飛 8h20m</div>
+          <div class="pass-times"><span class="seg">19:55 起飛</span> → <span class="seg">隔日 06:15 抵達</span> · <span class="seg">夜航直飛 8h20m</span></div>
         </div>
         <div class="pass-stub"><div class="d">09/03</div><div class="w">週四 出發</div></div>
       </div>
@@ -430,7 +431,7 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
         <div class="pass-main">
           <div class="pass-code">OD122 · 回程</div>
           <div class="pass-route"><span class="port">SYD</span><span class="arrow">✈</span><span class="port">KUL</span></div>
-          <div class="pass-times">08:35 起飛 → 15:40 抵達吉隆坡 · 早班機 9h05m</div>
+          <div class="pass-times"><span class="seg">08:35 起飛</span> → <span class="seg">15:40 抵達吉隆坡</span> · <span class="seg">早班機 9h05m</span></div>
         </div>
         <div class="pass-stub"><div class="d">09/12</div><div class="w">週六 返航</div></div>
       </div>
