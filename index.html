@@ -161,6 +161,22 @@ h1 .thin{display:block; font-size:.42em; font-weight:600; letter-spacing:.24em; 
 .tznote .sep{color:var(--ink-3)}
 .tznote .txt{font-size:.85rem; color:var(--ink-2)}
 
+/* ---------- live clocks ---------- */
+.clocks{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px}
+.clock{
+  background:var(--surface); border:1px solid var(--rule); border-radius:4px;
+  padding:11px 16px; box-shadow:var(--shadow);
+  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+}
+.cl-city{
+  font-family:var(--f-label); font-size:.7rem; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+}
+.clock:first-child .cl-city{color:var(--ferry)}
+.cl-time{font-size:1.45rem; font-weight:500; letter-spacing:.03em}
+.cl-date{margin-left:auto; font-size:.78rem; color:var(--ink-3)}
+@media (max-width:560px){ .clocks{grid-template-columns:1fr} }
+
 /* ---------- overview gantt ---------- */
 .section{padding:56px 0}
 .section-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px}
@@ -276,6 +292,12 @@ h2{font-size:1.5rem}
   font-size:.76rem; color:var(--ink-2); font-family:var(--f-mono);
   border:1px solid var(--rule); border-radius:2px; padding:1px 7px; background:var(--paper);
 }
+.maps{list-style:none; margin:8px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:6px 8px}
+.maps a{
+  display:inline-block; font-size:.76rem; font-family:var(--f-mono); text-decoration:none;
+  color:var(--ferry); border:1px solid var(--rule); border-radius:2px; padding:1px 7px; background:var(--paper);
+}
+.maps a:hover{border-color:var(--ferry); background:var(--ferry-soft)}
 .day-foot{
   padding:11px 22px; border-top:1px solid var(--rule-soft); background:var(--paper);
   font-size:.82rem; color:var(--ink-3); display:flex; gap:8px; align-items:baseline;
@@ -321,9 +343,9 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
 
 <header class="masthead">
   <div class="wrap">
-    <div class="eyebrow"><span class="dash"></span><span class="label">Digital Nomad · Sydney 2025</span></div>
+    <div class="eyebrow"><span class="dash"></span><span class="label">Digital Nomad · Sydney 2026</span></div>
     <h1><span class="thin">遠端工作 × 城市探索</span>雪梨數位遊牧行程表</h1>
-    <p class="daterange"><b>9/3 (四) — 9/12 (六)</b> &nbsp;·&nbsp; 10 天 9 夜 &nbsp;·&nbsp; 台灣／吉隆坡 +2 小時時差</p>
+    <p class="daterange"><b>9/3 (四) — 9/12 (六)</b> &nbsp;·&nbsp; 10 天 9 夜 &nbsp;·&nbsp; 住宿 33 Ultimo Rd（Haymarket）&nbsp;·&nbsp; 吉隆坡 +2 小時時差</p>
 
     <div class="stats">
       <div class="stat"><div class="n">10</div><div class="t">總天數</div></div>
@@ -336,16 +358,16 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
       <div class="pass">
         <div class="pass-main">
           <div class="pass-code">OD121 · 去程</div>
-          <div class="pass-route"><span class="port">TPE</span><span class="arrow">✈</span><span class="port">SYD</span></div>
-          <div class="pass-times">19:55 起飛 → 隔日 06:15 抵達 · 夜航直飛</div>
+          <div class="pass-route"><span class="port">KUL</span><span class="arrow">✈</span><span class="port">SYD</span></div>
+          <div class="pass-times">19:55 起飛 → 隔日 06:15 抵達 · 夜航直飛 8h20m</div>
         </div>
         <div class="pass-stub"><div class="d">09/03</div><div class="w">週四 出發</div></div>
       </div>
       <div class="pass ret">
         <div class="pass-main">
-          <div class="pass-code">OD120 · 回程</div>
+          <div class="pass-code">OD122 · 回程</div>
           <div class="pass-route"><span class="port">SYD</span><span class="arrow">✈</span><span class="port">KUL</span></div>
-          <div class="pass-times">08:35 起飛 → 15:40 抵達吉隆坡 · 早班機</div>
+          <div class="pass-times">08:35 起飛 → 15:40 抵達吉隆坡 · 早班機 9h05m</div>
         </div>
         <div class="pass-stub"><div class="d">09/12</div><div class="w">週六 返航</div></div>
       </div>
@@ -356,6 +378,19 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
       <span class="sep">→</span>
       <span class="k" style="color:var(--gold)">雪梨 12:00–21:00</span>
       <span class="txt">週一至週五固定工作時段，早上與深夜全部留給雪梨。</span>
+    </div>
+
+    <div class="clocks" aria-label="現在時間">
+      <div class="clock">
+        <span class="cl-city">雪梨 SYD</span>
+        <span class="cl-time mono" id="clock-syd">--:--:--</span>
+        <span class="cl-date mono" id="date-syd"></span>
+      </div>
+      <div class="clock">
+        <span class="cl-city">台灣 TW</span>
+        <span class="cl-time mono" id="clock-tw">--:--:--</span>
+        <span class="cl-date mono" id="date-tw"></span>
+      </div>
     </div>
   </div>
 </header>
@@ -399,20 +434,20 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
     <div class="label">行前備忘</div>
     <div class="notes">
       <div class="note">
-        <h3>需要預約的兩件事</h3>
-        <p>9/5 雪梨歌劇院中文導覽梯次，以及 9/6 藍山 Scenic World 纜車票，建議出發前線上訂好；Featherdale 的袋鼠飼料現場買即可。</p>
+        <h3>預約狀態</h3>
+        <p>已預約：9/5 Nick's Seafood、9/6 The Meat &amp; Wine Co。強制預約：9/10 BISTECCA（提前 30 天開放訂位）。9/4 歌劇院中文導覽、9/5 藍山跟團與 9/11 O Bar 也建議提前訂好。</p>
       </div>
       <div class="note">
-        <h3>開門時間決定早晨路線</h3>
-        <p>Featherdale 08:00、QVB 09:00、Hyde Park Barracks 與 NSW 美術館 10:00。晨間觀光排在 08:30 出門剛好銜接。</p>
+        <h3>開門時間決定路線</h3>
+        <p>The Rocks Market 10:00、Old Government House 10:00–16:00、Hyde Park Barracks 10:00–17:00、鸚鵡島遊客中心 09:00。晨間行程以此銜接，晚到就往後排。</p>
       </div>
       <div class="note">
         <h3>交通</h3>
-        <p>感應式信用卡即可刷 Opal 系統，火車、渡輪、公車通用。機場線 T1 直達市區；Circular Quay 的渡輪本身就是最好的觀景行程。</p>
+        <p>公車、火車、輕軌、渡輪直接感應信用卡或 Apple Pay，免買票；週日全網每日上限只要 AUD $2.80。住宿步行 3 分鐘可達 Chinatown 輕軌站。</p>
       </div>
       <div class="note">
         <h3>回程當天</h3>
-        <p>9/12 需在 06:00 前抵達 T1，前一晚（9/11 工作結束後）務必打包完成，早晨只留退房與交通時間。</p>
+        <p>9/12 清晨 05:30 三人搭 UberXL 直達 T1（約 20 分鐘、AUD $45–55），08:35 OD122 起飛。9/11 收工後務必打包完成。</p>
       </div>
     </div>
     <p class="colophon">時間為雪梨當地時間（AEST, UTC+10）。工作時段以外的行程為彈性安排，可依天氣與體力調整。</p>
@@ -428,154 +463,234 @@ const DAYS = [
     foot:"夜航睡飽，隔天早上直接開始行程。",
     items:[
       { s:"19:55", e:"24:00", open:true, cat:"transit", time:"19:55",
-        t:"OD121 直飛雪梨",
-        d:"晚間起飛的夜航班機，機上休息，隔日清晨抵達。" }
+        t:"OD121 吉隆坡直飛雪梨",
+        d:"19:55 自吉隆坡 KUL T1 起飛的夜航班機，機上休息，隔日 06:15 抵達雪梨。" }
     ]},
 
-  { d:"09/04", dow:"週五", kind:"work", badge:"工作日 1", title:"抵達安頓 · 岩石區初見面",
-    foot:"落地即開工的一天，早上先把最經典的港灣看完。",
+  { d:"09/04", dow:"週五", kind:"work", badge:"工作日 1", title:"抵達 · 歌劇院導覽 · 港區辦公",
+    foot:"落地即開工的一天：上午看完最經典的港灣，下午在港區 Cafe 開工、傍晚進房。",
     items:[
-      { s:"06:15", e:"08:30", cat:"transit", time:"06:15", to:"08:30",
-        t:"抵達雪梨機場 T1 · 寄放行李",
-        d:"入境後搭機場線火車進市區，先到 Airbnb 寄放行李、整理裝備。",
-        tips:["Opal 感應支付","機場線約 15 分鐘"] },
-      { s:"09:00", e:"11:30", cat:"sight", time:"09:00", to:"11:30",
-        t:"岩石區 The Rocks 與雪梨歌劇院外圍",
-        d:"漫步殖民時期的歷史巷弄與砂岩老屋，再走到歌劇院外圍拍第一組照片。" },
+      { s:"06:15", e:"07:45", cat:"transit", time:"06:15", to:"07:45",
+        t:"入境與叫車",
+        d:"06:15 降落，提領行李後走至 P7 停車場搭乘 UberXL 直達 Circular Quay。",
+        tips:["車程約 25–30 分鐘","約 AUD $50–65"] },
+      { s:"07:45", e:"08:30", cat:"transit", time:"07:45", to:"08:30",
+        t:"寄放行李 · 步行至歌劇院",
+        d:"於 Bounce Luggage Storage – Circular Quay 寄放大型行李，步行 8 分鐘至歌劇院。",
+        maps:[["Bounce 寄物","Bounce Luggage Storage Circular Quay Sydney"]] },
+      { s:"09:00", e:"10:45", cat:"sight", time:"09:00", to:"10:45",
+        t:"雪梨歌劇院中文導覽",
+        d:"參加 09:30–10:30 中文導覽（60 分鐘），結束後於廣場拍照。",
+        tips:["需事先預約","中文梯次 09:30"],
+        maps:[["雪梨歌劇院","Sydney Opera House"]] },
+      { s:"10:45", e:"11:45", cat:"sight", time:"10:45", to:"11:45",
+        t:"皇家植物園 · The Rocks Market",
+        d:"漫步皇家植物園拍照，再走至 The Rocks Market 買輕食。",
+        tips:["市集 10:00 開門"],
+        maps:[["皇家植物園","Royal Botanic Garden Sydney"],["The Rocks Market","The Rocks Markets Sydney"]] },
+      { s:"12:00", e:"15:15", cat:"work", time:"12:00", to:"15:15",
+        t:"港區 WiFi Cafe 定點辦公",
+        d:"入座 MCA Cafe at Tallawoladah（10:00–16:00）或 Cabrito Coffee Traders（07:00–15:30）使用 Wi-Fi 開工。",
+        maps:[["MCA Cafe","MCA Cafe at Tallawoladah Sydney"],["Cabrito Coffee","Cabrito Coffee Traders Sydney"]] },
+      { s:"15:15", e:"16:15", cat:"transit", time:"15:15", to:"16:15",
+        t:"取行李 · 輕軌進房入住",
+        d:"碼頭取行李 → 輕軌 L2/L3（Circular Quay → Chinatown，12 分鐘）→ 步行 3 分鐘至 33 Ultimo Rd 辦理入住。",
+        maps:[["住宿 33 Ultimo Rd","33 Ultimo Rd Haymarket NSW"]] },
+      { s:"16:15", e:"21:00", cat:"work", time:"16:15", to:"21:00",
+        t:"遠端工作（後半段）",
+        d:"房內完成後半段工作，對應台灣／吉隆坡 10:00–19:00。" },
+      { s:"21:00", e:"22:00", cat:"night", time:"21:00 起",
+        t:"Mamak Haymarket 宵夜",
+        d:"步行 3 分鐘享用現煎印度甩餅與沙爹。",
+        tips:["營業至 22:00"],
+        maps:[["Mamak Haymarket","Mamak Haymarket Sydney"]] }
+    ]},
+
+  { d:"09/05", dow:"週六", kind:"off", badge:"放假日 1", title:"藍山＋Sydney Zoo 一日遊 · 煙火海鮮大餐",
+    foot:"整天不開電腦：跟團上藍山，傍晚搭落日渡輪回港，晚上煙火配海鮮。",
+    items:[
+      { s:"07:15", e:"07:30", cat:"transit", time:"07:15", to:"07:30",
+        t:"Central Station 門口集合",
+        d:"步行 8 分鐘至 Central Station 門口集合，跟團巴士接送。",
+        maps:[["Central Station","Central Station Sydney"]] },
+      { s:"09:30", e:"15:30", cat:"sight", time:"09:30", to:"15:30",
+        t:"Sydney Zoo · 三姐妹峰 · Scenic World",
+        d:"Sydney Zoo → Echo Point Lookout 三姐妹峰 → Scenic World 纜車 → 鲁拉小鎮。",
+        tips:["山上溫差大帶外套"],
+        maps:[["Sydney Zoo","Sydney Zoo Eastern Creek"],["Echo Point 三姐妹峰","Echo Point Lookout Katoomba"],["Scenic World","Scenic World Katoomba"],["鲁拉 Leura","Leura NSW"]] },
+      { s:"17:00", e:"19:00", cat:"sight", time:"17:00", to:"19:00",
+        t:"F3 落日渡輪回港",
+        d:"奧林匹克公園碼頭搭乘 F3 渡輪抵達達令港，約 50 分鐘船程看夕陽。",
+        maps:[["奧林匹克公園碼頭","Sydney Olympic Park Ferry Wharf"]] },
+      { s:"19:00", e:"19:25", cat:"transit", time:"19:00", to:"19:25",
+        t:"水岸步道散步至餐廳",
+        d:"達令港碼頭下船，沿水岸步道散步至餐廳。" },
+      { s:"19:30", e:"21:00", cat:"night", time:"19:30", to:"21:00",
+        t:"Nick's Seafood Restaurant 海鮮大餐",
+        d:"入座已預約的水岸座位，20:30 於餐廳戶外水岸第一排觀賞 Darling Harbour 煙火秀。",
+        tips:["已預約","營業至 22:00","20:30 煙火"],
+        maps:[["Nick's Seafood","Nick's Seafood Restaurant Darling Harbour"]] },
+      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
+        t:"The Star 賭場或回房休息",
+        d:"可前往 The Star 賭場（24 小時營業），或步行 8 分鐘回房休息。",
+        maps:[["The Star","The Star Sydney"]] }
+    ]},
+
+  { d:"09/06", dow:"週日", kind:"off", badge:"放假日 2", title:"舊政府大廈 · NRL 球賽 · 牛排晚餐",
+    foot:"週日大眾運輸每日上限只要 AUD $2.80，放心多搭幾趟。",
+    items:[
+      { s:"11:00", e:"12:15", cat:"sight", time:"11:00", to:"12:15",
+        t:"Edition Roasters 早午餐",
+        d:"睡飽後步行 2 分鐘吃早午餐。",
+        tips:["08:00–15:00 營業"],
+        maps:[["Edition Roasters","Edition Roasters Haymarket Sydney"]] },
+      { s:"12:15", e:"13:30", cat:"transit", time:"12:15", to:"13:30",
+        t:"火車前往 Parramatta",
+        d:"步行至 Central 搭火車至 Parramatta（車程 25 分鐘），出站步行 18 分鐘至舊政府大廈。" },
+      { s:"13:30", e:"15:00", cat:"sight", time:"13:30", to:"15:00",
+        t:"世界遺產 Old Government House",
+        d:"參觀世界遺產舊政府大廈與領地，順遊 Parramatta Park。",
+        tips:["10:00–16:00 營業"],
+        maps:[["Old Government House","Old Government House Parramatta"],["Parramatta Park","Parramatta Park"]] },
+      { s:"15:00", e:"15:30", cat:"transit", time:"15:00", to:"15:30",
+        t:"橫越公園步行至球場",
+        d:"步行 15 分鐘至 CommBank Stadium，15:30 準時入場。" },
+      { s:"16:30", e:"18:30", cat:"sight", time:"16:30", to:"18:30",
+        t:"NRL：Penrith Panthers vs Wests Tigers",
+        d:"本趟重頭戲，現場感受澳式橄欖球聯盟的氣氛。",
+        maps:[["CommBank Stadium","CommBank Stadium Parramatta"]] },
+      { s:"18:30", e:"20:10", cat:"transit", time:"18:30", to:"20:10",
+        t:"火車回市區 · 散步進 Barangaroo",
+        d:"步行至 Parramatta 車站搭火車回 Wynyard，出站散步約 10 分鐘進入 Barangaroo 水岸特區。" },
+      { s:"20:15", e:"22:00", cat:"night", time:"20:15", to:"22:00",
+        t:"The Meat & Wine Co Barangaroo 牛排晚餐",
+        d:"已預約的水岸晚餐，為放假日收尾。",
+        tips:["已預約","營業至 22:00"],
+        maps:[["The Meat & Wine Co","The Meat and Wine Co Barangaroo"]] }
+    ]},
+
+  { d:"09/07", dow:"週一", kind:"work", badge:"工作日 2", title:"世界遺產雙踩點：鸚鵡島＋海德公園兵營",
+    foot:"上午連跑兩個世界遺產，中午前回房開工。",
+    items:[
+      { s:"08:15", e:"10:45", cat:"sight", time:"08:15", to:"10:45",
+        t:"Cockatoo Island 鸚鵡島",
+        d:"搭輕軌至 Circular Quay，轉乘 F3/F8 渡輪（20 分鐘）登上世界遺產鸚鵡島。",
+        tips:["遊客中心 09:00 開門"],
+        maps:[["Cockatoo Island","Cockatoo Island Sydney"]] },
+      { s:"10:45", e:"11:45", cat:"sight", time:"10:45", to:"11:45",
+        t:"Hyde Park Barracks 海德公園兵營",
+        d:"搭渡輪返回 Circular Quay，步行 12 分鐘參觀世界遺產囚犯營房。",
+        tips:["10:00–17:00 營業"],
+        maps:[["Hyde Park Barracks","Hyde Park Barracks Sydney"]] },
       { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
         t:"遠端工作",
-        d:"房內專注辦公與線上會議，對應台灣時間 10:00–19:00。" },
-      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
-        t:"達令港 Darling Harbour 水岸晚餐",
-        d:"收工後步行到水岸餐廳吃第一頓正式晚餐，看港邊夜景。" }
+        d:"返房專注辦公。" },
+      { s:"21:00", e:"22:00", cat:"night", time:"21:00 起",
+        t:"Spice Alley 宵夜",
+        d:"步行 5 分鐘到巷弄裡的亞洲小吃街收尾。",
+        tips:["營業至 21:30–22:00"],
+        maps:[["Spice Alley","Spice Alley Chippendale Sydney"]] }
     ]},
 
-  { d:"09/05", dow:"週六", kind:"off", badge:"放假日 1", title:"歌劇院導覽 · 市集 · 海岸線",
-    foot:"整天不開電腦，從室內導覽一路玩到海邊。",
+  { d:"09/08", dow:"週二", kind:"work", badge:"工作日 3", title:"邦代海灘懸崖絕景 Brunch",
+    foot:"333 公車直達，早餐吃在海景第一排。",
     items:[
-      { s:"09:30", e:"11:00", cat:"sight", time:"09:30", to:"11:00",
-        t:"雪梨歌劇院內部導覽",
-        d:"預約中文梯次，走進音樂廳與後台，理解那組帆形屋頂是怎麼蓋起來的。",
-        tips:["需事先線上預約","中文梯次"] },
-      { s:"11:00", e:"12:30", cat:"sight", time:"11:00", to:"12:30",
-        t:"The Rocks Markets 週末市集",
-        d:"逛週末手作市集，順路鑽進幾間百年古蹟酒吧。" },
-      { s:"13:00", e:"17:30", cat:"sight", time:"13:00", to:"17:30",
-        t:"Circular Quay 渡輪 → Manly Beach",
-        d:"搭渡輪橫越雪梨港，在 Manly 沿海散步、吃招牌炸魚薯條，找間海景 Cafe 喝咖啡看海。",
-        tips:["渡輪約 30 分鐘","去程坐右舷看歌劇院"] },
-      { s:"18:30", e:"21:00", cat:"night", time:"18:30 起",
-        t:"Chinatown / Haymarket 熱炒宵夜",
-        d:"回市區補一頓亞洲胃的熱炒或宵夜。" }
-    ]},
-
-  { d:"09/06", dow:"週日", kind:"off", badge:"放假日 2", title:"藍山世界遺產 · 親手餵袋鼠",
-    foot:"全天遠郊 08:00–17:30，回程前把體力留給牛排。",
-    items:[
-      { s:"08:00", e:"10:00", cat:"sight", time:"08:00", to:"10:00",
-        t:"第一站：Featherdale Wildlife Park",
-        d:"08:00 一開門就進場，買飼料親手餵袋鼠，近距離看無尾熊，避開團客人潮。",
-        tips:["08:00 開門","飼料現場購買"] },
-      { s:"10:00", e:"17:30", cat:"sight", time:"10:00", to:"17:30",
-        t:"第二站：藍山國家公園 Blue Mountains",
-        d:"世界遺產等級的峽谷景觀，看三姐妹岩，搭 Scenic World 的高空纜車、斜坡鐵路與森林纜車三種路線。",
-        tips:["Scenic World 建議預訂","山上溫差大帶外套"] },
-      { s:"18:30", e:"21:00", cat:"night", time:"18:30 起",
-        t:"市區高檔澳洲牛排",
-        d:"回到市區犒賞自己一份澳洲和牛或草飼牛排。" }
-    ]},
-
-  { d:"09/07", dow:"週一", kind:"work", badge:"工作日 2", title:"海德公園、植物園與囚犯營房",
-    foot:"純步行路線，全程集中在 CBD 東側。",
-    items:[
-      { s:"08:30", e:"10:00", cat:"sight", time:"08:30", to:"10:00",
-        t:"海德公園 · 聖瑪麗大教堂 · 皇家植物園",
-        d:"一路散步到 Mrs Macquarie's Chair，那裡是拍歌劇院與港灣大橋同框全景的最佳位置。" },
-      { s:"10:00", e:"11:15", cat:"sight", time:"10:00", to:"11:15",
-        t:"Hyde Park Barracks 海德公園營房",
-        d:"世界遺產的囚犯營房博物館，用聲音導覽體驗殖民與流放歷史。",
-        tips:["10:00 開門"] },
-      { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
-        t:"遠端工作",
-        d:"房內專注辦公。" },
-      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
-        t:"唐人街 / Haymarket 宵夜",
-        d:"亞洲料理或熱炒收尾。" }
-    ]},
-
-  { d:"09/08", dow:"週二", kind:"work", badge:"工作日 3", title:"邦代海灘與懸崖海景 Brunch",
-    foot:"公車直達，早餐吃在懸崖邊。",
-    items:[
-      { s:"08:30", e:"11:30", cat:"sight", time:"08:30", to:"11:30",
-        t:"Bondi Beach 邦代海灘",
-        d:"搭公車直達，在 Icebergs Dining Room 或 Speedos Cafe 吃懸崖海景 Brunch，再走一段 Bondi to Bronte 海岸步道。",
-        tips:["Icebergs 建議訂位","海岸步道單程約 1 小時"] },
+      { s:"08:15", e:"09:10", cat:"transit", time:"08:15", to:"09:10",
+        t:"333 公車直達 Bondi Beach",
+        d:"步行至 Museum 站搭乘 333 號公車，直達邦代海灘。",
+        tips:["車程約 35–40 分鐘"],
+        maps:[["Museum 站","Museum Station Sydney"],["Bondi Beach","Bondi Beach"]] },
+      { s:"09:15", e:"11:00", cat:"sight", time:"09:15", to:"11:00",
+        t:"Speedos Cafe 絕景早午餐",
+        d:"享用早午餐，飽覽 Bondi 全景。",
+        tips:["06:00–16:00 營業"],
+        maps:[["Speedos Cafe","Speedos Cafe North Bondi"]] },
+      { s:"11:15", e:"12:00", cat:"transit", time:"11:15", to:"12:00",
+        t:"333 公車返回市區",
+        d:"原路搭 333 號公車回市區，銜接 12:00 開工。" },
       { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
         t:"遠端工作",
         d:"房內專注辦公與線上會議。" },
       { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
-        t:"Surry Hills 地下酒吧",
-        d:"到 The Baxter Inn 這類藏在巷弄地下室的威士忌吧小酌。" }
+        t:"The Baxter Inn 地下威士忌酒吧",
+        d:"步行 12 分鐘，鑽進藏在地下室的威士忌吧小酌。",
+        tips:["16:00–01:00 營業"],
+        maps:[["The Baxter Inn","The Baxter Inn Sydney"]] }
     ]},
 
-  { d:"09/09", dow:"週三", kind:"work", badge:"工作日 4", title:"文青 Paddington 與精品咖啡",
-    foot:"雪梨咖啡文化的主場，早上先補一杯好的。",
+  { d:"09/09", dow:"週三", kind:"work", badge:"工作日 4", title:"Single O · Paddington · 古蹟酒吧",
+    foot:"雪梨咖啡文化的主場，晚上到岩石區喝自釀啤酒。",
     items:[
-      { s:"08:30", e:"11:30", cat:"sight", time:"08:30", to:"11:30",
-        t:"Paddington 街區與 Single O 咖啡",
-        d:"欣賞成排維多利亞式排屋與鑄鐵陽台，在 Single O 喝一杯雪梨精品咖啡代表作。" },
+      { s:"08:30", e:"09:45", cat:"sight", time:"08:30", to:"09:45",
+        t:"Single O Surry Hills 早午餐",
+        d:"步行 10 分鐘，喝一杯雪梨精品咖啡代表作。",
+        tips:["07:00–15:00 營業"],
+        maps:[["Single O","Single O Surry Hills"]] },
+      { s:"10:00", e:"11:15", cat:"sight", time:"10:00", to:"11:15",
+        t:"Paddington 街區漫步",
+        d:"欣賞成排維多利亞式排屋與鑄鐵陽台。",
+        maps:[["Paddington","Paddington NSW Sydney"]] },
       { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
         t:"遠端工作",
         d:"房內專注辦公。" },
       { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
-        t:"Barangaroo 水岸餐酒館",
-        d:"新開發的港區餐酒館區，適合晚一點的一頓好晚餐。" }
+        t:"The Lord Nelson Brewery Hotel 古蹟酒吧",
+        d:"搭輕軌至 Circular Quay，走進雪梨最老的自釀啤酒吧喝一輪。",
+        tips:["營業至 23:00"],
+        maps:[["The Lord Nelson","The Lord Nelson Brewery Hotel Sydney"]] }
     ]},
 
-  { d:"09/10", dow:"週四", kind:"work", badge:"工作日 5", title:"當代藝術與 QVB 購物",
-    foot:"室內行程日，剛好躲雨也不怕。",
+  { d:"09/10", dow:"週四", kind:"work", badge:"工作日 5", title:"QVB 與當代藝廊 · Bistecca 牛排",
+    foot:"白天室內行程剛好躲雨，晚上是本趟的重點大餐。",
     items:[
       { s:"08:30", e:"10:00", cat:"sight", time:"08:30", to:"10:00",
-        t:"維多利亞女王大廈 QVB",
-        d:"百年羅曼式建築本身就值得一看，順道採買 Aesop 等伴手禮。",
-        tips:["店家 09:00 開門"] },
+        t:"The Grounds of The City 早午餐",
+        d:"搭輕軌至 Town Hall 站享用早午餐。",
+        tips:["07:00–17:00 營業"],
+        maps:[["The Grounds of The City","The Grounds of the City Sydney"]] },
       { s:"10:00", e:"11:15", cat:"sight", time:"10:00", to:"11:15",
-        t:"新南威爾斯美術館 Art Gallery of NSW",
-        d:"參觀 2022 年落成的新館 Naala Badu，館藏與建築都很值得。",
-        tips:["10:00 開門","常設展免費"] },
+        t:"QVB 或新南威爾斯畫廊",
+        d:"逛維多利亞女王大廈（09:00 開門），或參觀新南威爾斯畫廊（10:00 開門）。",
+        maps:[["QVB","Queen Victoria Building Sydney"],["新南威爾斯畫廊","Art Gallery of New South Wales"]] },
       { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
         t:"遠端工作",
         d:"房內專注辦公。" },
-      { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
-        t:"岩石區古蹟酒吧",
-        d:"在雪梨最老的幾間酒吧裡喝一輪本地精釀。" }
+      { s:"21:30", e:"23:00", cat:"night", time:"21:30", to:"23:00",
+        t:"BISTECCA 炭烤 T 骨牛排",
+        d:"搭輕軌至 Bridge St 站（或步行 15 分鐘），享用本趟重點大餐。",
+        tips:["強制預約：提前 30 天開放","晚間營業至 23:00"],
+        maps:[["BISTECCA","Bistecca Sydney"]] }
     ]},
 
-  { d:"09/11", dow:"週五", kind:"work", badge:"工作日 6", title:"現剖生蠔海鮮大餐 · 最後一天",
-    foot:"工作結束後先打包，隔天早上只剩退房。",
+  { d:"09/11", dow:"週五", kind:"work", badge:"工作日 6", title:"現剖生蠔海鮮盛宴 · 最後工作日",
+    foot:"工作結束後先打包，隔天清晨只剩退房。",
     items:[
       { s:"08:30", e:"11:30", cat:"sight", time:"08:30", to:"11:30",
-        t:"雪梨魚市場 Sydney Fish Market",
-        d:"把早餐吃成海鮮大餐：現剖生蠔、黑金鮑魚與龍蝦，南半球最大魚市場的日常。" },
+        t:"Sydney Fish Market 現剖生蠔與龍蝦",
+        d:"步行至 Capitol Square 站搭 L1 輕軌直達 Fish Market 站（12 分鐘），把早餐吃成海鮮盛宴。",
+        tips:["07:00–16:00 營業"],
+        maps:[["Sydney Fish Market","Sydney Fish Market"]] },
       { s:"12:00", e:"21:00", cat:"work", time:"12:00", to:"21:00",
         t:"遠端工作 · 收尾與打包",
-        d:"完成本週最後一天遠端工作，收工後隨即打包行李。" },
+        d:"返房完成最後一天工作，收工後隨即打包行李。" },
       { s:"21:00", e:"23:00", cat:"night", time:"21:00 起",
-        t:"O Bar and Dining 高空酒吧",
-        d:"在旋轉高空酒吧喝杯調酒，用 360 度夜景慶祝完成雪梨數位遊牧。",
-        tips:["建議訂位"] }
+        t:"O Bar and Dining 47 樓高空酒吧",
+        d:"搭輕軌至 Bridge St 站，用 360 度夜景慶祝完成雪梨數位遊牧。",
+        tips:["營業至 23:00 / 00:00","建議訂位"],
+        maps:[["O Bar and Dining","O Bar and Dining Sydney"]] }
     ]},
 
   { d:"09/12", dow:"週六", kind:"fly", badge:"返航日", title:"早班機返航",
-    foot:"05:30 退房，行程結束。",
+    foot:"05:30 出發前往機場，行程結束。",
     items:[
-      { s:"05:30", e:"06:00", cat:"transit", time:"05:30", to:"06:00",
-        t:"退房 · 前往雪梨機場 T1",
-        d:"搭火車或 Uber，需在 06:00 前抵達 T1 辦理登機。",
-        tips:["清晨班次較少，建議 Uber"] },
+      { s:"05:30", e:"06:15", cat:"transit", time:"05:30", to:"06:15",
+        t:"UberXL 直達機場 T1",
+        d:"3 人搭乘 UberXL 直達 T1 機場。",
+        tips:["車程約 20 分鐘","約 AUD $45–55"],
+        maps:[["雪梨機場 T1","Sydney Airport T1 International Terminal"]] },
       { s:"08:35", e:"24:00", open:true, cat:"transit", time:"08:35",
-        t:"OD120 返航吉隆坡",
-        d:"08:35 起飛，15:40 抵達吉隆坡，順利結束十日行程。" }
+        t:"OD122 返航吉隆坡",
+        d:"08:35 起飛，15:40 抵達吉隆坡 KUL T1，順利結束十日行程。" }
     ]}
 ];
 
@@ -633,6 +748,7 @@ DAYS.forEach((day, idx) => {
         <div class="ititle">${i.t}<span class="cat">${CAT[i.cat]}</span></div>
         <p class="idesc">${i.d}</p>
         ${i.tips ? `<ul class="tips">${i.tips.map(t => `<li>${t}</li>`).join("")}</ul>` : ""}
+        ${i.maps ? `<ul class="maps">${i.maps.map(m => `<li><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(m[1])}" target="_blank" rel="noopener">📍 ${m[0]}</a></li>`).join("")}</ul>` : ""}
       </div>
     </li>`).join("");
 
@@ -673,6 +789,26 @@ const spy = new IntersectionObserver(es => {
   });
 }, { rootMargin: "-15% 0px -70% 0px" });
 cards.forEach(c => spy.observe(c));
+
+/* live clocks: Sydney & Taiwan */
+const zones = [
+  { tz:"Australia/Sydney", time:"clock-syd", date:"date-syd" },
+  { tz:"Asia/Taipei",      time:"clock-tw",  date:"date-tw"  }
+].map(z => ({
+  timeEl: document.getElementById(z.time),
+  dateEl: document.getElementById(z.date),
+  ft: new Intl.DateTimeFormat("en-GB", { timeZone:z.tz, hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false }),
+  fd: new Intl.DateTimeFormat("zh-TW", { timeZone:z.tz, month:"2-digit", day:"2-digit", weekday:"short" })
+}));
+function tickClocks(){
+  const now = new Date();
+  zones.forEach(z => {
+    z.timeEl.textContent = z.ft.format(now);
+    z.dateEl.textContent = z.fd.format(now);
+  });
+}
+tickClocks();
+setInterval(tickClocks, 1000);
 </script>
 </body>
 </html>
