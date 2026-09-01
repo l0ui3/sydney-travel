@@ -106,7 +106,8 @@ a{color:inherit}
   letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
 }
 
-.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+/* horizontal padding only (padding-inline): .section owns the vertical via padding-block */
+.wrap{max-width:var(--maxw); margin:0 auto; padding-inline:24px}
 
 /* ---------- masthead ---------- */
 .masthead{
@@ -383,7 +384,7 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
   .stats{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:560px){
-  .wrap{padding:0 18px}
+  .wrap{padding-inline:18px}
   .item{grid-template-columns:1fr; gap:6px}
   .itime{display:flex; gap:8px; padding-top:0}
   .itime .to{display:inline}
