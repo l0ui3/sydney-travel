@@ -208,7 +208,8 @@ h1 .thin{display:block; font-size:.42em; font-weight:600; letter-spacing:.24em; 
 @media (max-width:560px){ .clocks{grid-template-columns:1fr} }
 
 /* ---------- overview gantt ---------- */
-.section{padding:56px 0}
+/* padding-block only: .section shares elements with .wrap, which owns the horizontal padding */
+.section{padding-block:56px}
 .section-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px}
 h2{font-size:1.5rem}
 .legend{display:flex; flex-wrap:wrap; gap:14px}
