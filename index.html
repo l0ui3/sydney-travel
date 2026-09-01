@@ -16,6 +16,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap">
+<script>
+/* apply saved theme before first paint to avoid a flash */
+try{ const t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; }catch(e){}
+</script>
 <style>
 /* ---------- tokens ---------- */
 :root{
@@ -114,6 +118,13 @@ a{color:inherit}
 .masthead .wrap{padding-top:56px; padding-bottom:38px}
 .eyebrow{display:flex; align-items:center; gap:12px; margin-bottom:22px}
 .eyebrow .dash{height:1px; width:46px; background:var(--ferry); opacity:.65}
+.theme-btn{
+  margin-left:auto; font-family:var(--f-label); font-size:.72rem; font-weight:600;
+  letter-spacing:.08em; color:var(--ink-2); background:var(--surface);
+  border:1px solid var(--rule); border-radius:3px; padding:4px 11px;
+  cursor:pointer; white-space:nowrap;
+}
+.theme-btn:hover{color:var(--ink); border-color:var(--ink-3)}
 h1{font-size:clamp(2.5rem, 6.5vw, 4.25rem); letter-spacing:.01em}
 h1 .thin{display:block; font-size:.42em; font-weight:600; letter-spacing:.24em; color:var(--ferry); margin-bottom:.55em}
 .daterange{
@@ -391,7 +402,9 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
 
 <header class="masthead">
   <div class="wrap">
-    <div class="eyebrow"><span class="dash"></span><span class="label">Digital Nomad · Sydney 2026</span></div>
+    <div class="eyebrow"><span class="dash"></span><span class="label">Digital Nomad · Sydney 2026</span>
+      <button id="theme-btn" class="theme-btn" type="button" aria-label="切換深淺色模式">🌓 自動</button>
+    </div>
     <h1><span class="thin">遠端工作 × 城市探索</span>雪梨數位遊牧行程表</h1>
     <p class="daterange"><b>9/3 (四) — 9/12 (六)</b> &nbsp;·&nbsp; 10 天 9 夜 &nbsp;·&nbsp; 住宿 33 Ultimo Rd（Haymarket）&nbsp;·&nbsp; 吉隆坡 +2 小時時差</p>
 
@@ -975,6 +988,25 @@ setInterval(updateNow, 60000);
     });
   } catch (e) { /* offline: SW serves the last cached forecast, or stays blank */ }
 })();
+
+/* theme toggle: 自動 -> 深色 -> 淺色 */
+const themeBtn = document.getElementById("theme-btn");
+const THEMES = [["auto","🌓 自動"],["dark","🌙 深色"],["light","☀️ 淺色"]];
+function applyTheme(t){
+  if (t === "auto") delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = t;
+  themeBtn.textContent = THEMES.find(x => x[0] === t)[1];
+  try{ t === "auto" ? localStorage.removeItem("theme") : localStorage.setItem("theme", t); }catch(e){}
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue("--paper").trim();
+}
+let themeIdx = 0;
+try{ themeIdx = Math.max(0, THEMES.findIndex(x => x[0] === localStorage.getItem("theme"))); }catch(e){}
+applyTheme(THEMES[themeIdx][0]);
+themeBtn.addEventListener("click", () => {
+  themeIdx = (themeIdx + 1) % THEMES.length;
+  applyTheme(THEMES[themeIdx][0]);
+});
 
 /* offline support */
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
