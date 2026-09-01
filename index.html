@@ -174,14 +174,25 @@ h1 .thin{display:block; font-size:.42em; font-weight:600; letter-spacing:.24em; 
 .clock{
   background:var(--surface); border:1px solid var(--rule); border-radius:4px;
   padding:11px 16px; box-shadow:var(--shadow);
-  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+  display:flex; align-items:center; gap:14px;
 }
+.cl-face{width:58px; height:58px; flex:none}
+.cf-ring{fill:var(--paper); stroke:var(--rule); stroke-width:2.5}
+.cf-ticks line{stroke:var(--ink-3); stroke-width:2}
+.cf-ticks line.maj{stroke:var(--ink-2); stroke-width:3}
+.cf-hour{stroke:var(--ink); stroke-width:5; stroke-linecap:round}
+.cf-min{stroke:var(--ink); stroke-width:3; stroke-linecap:round}
+.cf-sec{stroke:var(--ferry); stroke-width:1.8; stroke-linecap:round}
+.cf-pin{fill:var(--ferry)}
+.clock:nth-child(2) .cf-sec{stroke:var(--gold)}
+.clock:nth-child(2) .cf-pin{fill:var(--gold)}
+.cl-txt{display:flex; flex-direction:column; gap:1px; min-width:0}
 .cl-city{
   font-family:var(--f-label); font-size:.7rem; font-weight:600;
   letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
 }
 .clock:first-child .cl-city{color:var(--ferry)}
-.cl-time{font-size:1.45rem; font-weight:500; letter-spacing:.03em}
+.cl-time{font-size:1.45rem; font-weight:500; letter-spacing:.03em; line-height:1.2}
 .cl-date{margin-left:auto; font-size:.78rem; color:var(--ink-3)}
 @media (max-width:560px){ .clocks{grid-template-columns:1fr} }
 
@@ -419,13 +430,33 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
 
     <div class="clocks" aria-label="現在時間">
       <div class="clock">
-        <span class="cl-city">雪梨 SYD</span>
-        <span class="cl-time mono" id="clock-syd">--:--:--</span>
+        <svg class="cl-face" viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="cf-ring" cx="50" cy="50" r="46"/>
+          <g class="cf-ticks"></g>
+          <line class="cf-hour" x1="50" y1="50" x2="50" y2="28"/>
+          <line class="cf-min" x1="50" y1="50" x2="50" y2="19"/>
+          <line class="cf-sec" x1="50" y1="54" x2="50" y2="15"/>
+          <circle class="cf-pin" cx="50" cy="50" r="3.5"/>
+        </svg>
+        <div class="cl-txt">
+          <span class="cl-city">雪梨 SYD</span>
+          <span class="cl-time mono" id="clock-syd">--:--:--</span>
+        </div>
         <span class="cl-date mono" id="date-syd"></span>
       </div>
       <div class="clock">
-        <span class="cl-city">台灣 TW</span>
-        <span class="cl-time mono" id="clock-tw">--:--:--</span>
+        <svg class="cl-face" viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="cf-ring" cx="50" cy="50" r="46"/>
+          <g class="cf-ticks"></g>
+          <line class="cf-hour" x1="50" y1="50" x2="50" y2="28"/>
+          <line class="cf-min" x1="50" y1="50" x2="50" y2="19"/>
+          <line class="cf-sec" x1="50" y1="54" x2="50" y2="15"/>
+          <circle class="cf-pin" cx="50" cy="50" r="3.5"/>
+        </svg>
+        <div class="cl-txt">
+          <span class="cl-city">台灣 TW</span>
+          <span class="cl-time mono" id="clock-tw">--:--:--</span>
+        </div>
         <span class="cl-date mono" id="date-tw"></span>
       </div>
     </div>
@@ -848,21 +879,44 @@ const spy = new IntersectionObserver(es => {
 }, { rootMargin: "-15% 0px -70% 0px" });
 cards.forEach(c => spy.observe(c));
 
-/* live clocks: Sydney & Taiwan */
+/* live clocks: Sydney & Taiwan, digital + analog */
+const SVG_NS = "http://www.w3.org/2000/svg";
+document.querySelectorAll(".cf-ticks").forEach(g => {
+  for (let i = 0; i < 12; i++){
+    const maj = i % 3 === 0;
+    const l = document.createElementNS(SVG_NS, "line");
+    l.setAttribute("x1", "50"); l.setAttribute("y1", "8");
+    l.setAttribute("x2", "50"); l.setAttribute("y2", maj ? "16" : "12.5");
+    l.setAttribute("transform", `rotate(${i * 30} 50 50)`);
+    if (maj) l.classList.add("maj");
+    g.appendChild(l);
+  }
+});
 const zones = [
   { tz:"Australia/Sydney", time:"clock-syd", date:"date-syd" },
   { tz:"Asia/Taipei",      time:"clock-tw",  date:"date-tw"  }
-].map(z => ({
-  timeEl: document.getElementById(z.time),
-  dateEl: document.getElementById(z.date),
-  ft: new Intl.DateTimeFormat("en-GB", { timeZone:z.tz, hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false }),
-  fd: new Intl.DateTimeFormat("zh-TW", { timeZone:z.tz, month:"2-digit", day:"2-digit", weekday:"short" })
-}));
+].map((z, i) => {
+  const face = document.querySelectorAll(".cl-face")[i];
+  return {
+    timeEl: document.getElementById(z.time),
+    dateEl: document.getElementById(z.date),
+    hourH: face.querySelector(".cf-hour"),
+    minH:  face.querySelector(".cf-min"),
+    secH:  face.querySelector(".cf-sec"),
+    fp: new Intl.DateTimeFormat("en-GB", { timeZone:z.tz, hour:"2-digit", minute:"2-digit", second:"2-digit", hourCycle:"h23" }),
+    fd: new Intl.DateTimeFormat("zh-TW", { timeZone:z.tz, month:"2-digit", day:"2-digit", weekday:"short" })
+  };
+});
 function tickClocks(){
   const now = new Date();
   zones.forEach(z => {
-    z.timeEl.textContent = z.ft.format(now);
+    const p = Object.fromEntries(z.fp.formatToParts(now).map(x => [x.type, x.value]));
+    const h = +p.hour, m = +p.minute, s = +p.second;
+    z.timeEl.textContent = `${p.hour}:${p.minute}:${p.second}`;
     z.dateEl.textContent = z.fd.format(now);
+    z.hourH.setAttribute("transform", `rotate(${(h % 12) * 30 + m * .5} 50 50)`);
+    z.minH.setAttribute("transform", `rotate(${m * 6 + s * .1} 50 50)`);
+    z.secH.setAttribute("transform", `rotate(${s * 6} 50 50)`);
   });
 }
 tickClocks();
