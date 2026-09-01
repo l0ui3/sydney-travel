@@ -24,35 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      # Encrypt the page with the shared passphrase (AES-256 via StatiCrypt).
-      # The published site only contains ciphertext + an unlock form.
-      # Salt is fixed (not secret) so "remember me" survives redeployments.
-      - name: Encrypt site
-        env:
-          STATICRYPT_PASSWORD: ${{ secrets.SITE_PASSWORD }}
-        run: |
-          if [ -z "$STATICRYPT_PASSWORD" ]; then
-            echo "::error::SITE_PASSWORD secret is not set. Add it under Settings -> Secrets and variables -> Actions."
-            exit 1
-          fi
-          npx --yes staticrypt@3 index.html -d dist \
-            --remember 30 \
-            --salt 13d9912e1cb5d89c7e92b285a3c0089d \
-            --short \
-            --template-color-primary "#04624B" \
-            --template-title "雪梨數位遊牧行程表" \
-            --template-instructions "輸入旅伴共用密碼解鎖行程" \
-            --template-button "解鎖" \
-            --template-placeholder "共用密碼" \
-            --template-remember "記住我（此裝置 30 天免輸入）" \
-            --config false
-          sed -i 's|<head>|<head><meta name="robots" content="noindex, nofollow">|' dist/index.html
-          cp sw.js manifest.webmanifest icon-180.png icon-512.png robots.txt dist/
-
       # Requires Settings -> Pages -> Source: "GitHub Actions" (one-time, manual:
       # the default GITHUB_TOKEN is not permitted to create the Pages site).
       - name: Configure Pages
@@ -61,7 +32,7 @@ jobs:
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: .
 
       - name: Deploy
         id: deployment
