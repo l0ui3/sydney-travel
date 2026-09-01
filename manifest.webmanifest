@@ -1,0 +1,16 @@
+{
+  "name": "雪梨數位遊牧行程表",
+  "short_name": "雪梨行程",
+  "description": "9/3–9/12 雪梨數位遊牧：遠端工作 × 城市探索的十日行程表",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EDEFEA",
+  "theme_color": "#0F262B",
+  "lang": "zh-Hant",
+  "icons": [
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

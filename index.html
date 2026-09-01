@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>雪梨數位遊牧行程表</title>
 <meta name="description" content="9/3–9/12 雪梨數位遊牧：平日 12:00–21:00 遠端工作，早晨與夜晚探索雪梨的十日行程表。">
+<meta name="theme-color" content="#0F262B">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-180.png" type="image/png">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="雪梨行程">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap">
@@ -304,6 +311,34 @@ h2{font-size:1.5rem}
 }
 .day-foot .label{color:var(--ink-3)}
 
+/* ---------- weather ---------- */
+.wx{font-family:var(--f-mono); font-size:.76rem; color:var(--ink-2); white-space:nowrap}
+.wx:empty{display:none}
+
+/* ---------- today / now highlighting ---------- */
+.day.today{border-color:var(--ferry); box-shadow:0 0 0 1px var(--ferry), var(--shadow)}
+.day.today .day-no{background:var(--ferry); border-color:var(--ferry); color:var(--surface)}
+.day.today .day-date{color:var(--ferry)}
+.rail a.today{color:var(--ferry); font-weight:600}
+.rail a.today .rd{color:var(--ferry)}
+.item.now .ibody{
+  background:linear-gradient(90deg, var(--ferry-soft), transparent 78%);
+  border-radius:0 3px 3px 0;
+}
+.item.now .ititle::after,
+.item.next .ititle::after{
+  font-family:var(--f-label); font-size:.63rem; font-weight:600; letter-spacing:.1em;
+  padding:1px 6px; border-radius:2px;
+}
+.item.now .ititle::after{
+  content:"進行中"; background:var(--ferry); color:var(--surface);
+  animation:livepulse 2.2s ease-in-out infinite;
+}
+.item.next .ititle::after{
+  content:"接下來"; border:1px solid var(--ferry); color:var(--ferry);
+}
+@keyframes livepulse{0%,100%{opacity:1}50%{opacity:.45}}
+
 /* ---------- footer ---------- */
 footer{border-top:1px solid var(--rule); background:var(--surface); margin-top:20px}
 footer .wrap{padding-top:40px; padding-bottom:56px}
@@ -336,6 +371,7 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   .day{opacity:1; transform:none; transition:none}
+  .item.now .ititle::after{animation:none}
 }
 </style>
 </head>
@@ -448,6 +484,26 @@ footer .wrap{padding-top:40px; padding-bottom:56px}
       <div class="note">
         <h3>回程當天</h3>
         <p>9/12 清晨 05:30 三人搭 UberXL 直達 T1（約 20 分鐘、AUD $45–55），08:35 OD122 起飛。9/11 收工後務必打包完成。</p>
+      </div>
+    </div>
+
+    <div class="label" style="margin-top:40px">緊急資訊 Emergency</div>
+    <div class="notes">
+      <div class="note">
+        <h3>緊急電話</h3>
+        <p>澳洲報案／消防／救護：<a href="tel:000">000</a>（免費）。非緊急警察事項：<a href="tel:131444">131 444</a>。</p>
+      </div>
+      <div class="note">
+        <h3>就近醫院（24 小時急診）</h3>
+        <p>St Vincent's Hospital（Darlinghurst）<a href="tel:+61283821111">+61 2 8382 1111</a>；Royal Prince Alfred Hospital（Camperdown）<a href="tel:+61295156111">+61 2 9515 6111</a>。</p>
+      </div>
+      <div class="note">
+        <h3>駐雪梨台北經濟文化辦事處</h3>
+        <p>Suite 1902, Level 19, MLC Centre, 19-29 Martin Place。辦公時間 <a href="tel:+61286504200">+61 2 8650 4200</a>；急難救助專線 <a href="tel:+61418415572">+61 418 415 572</a>。</p>
+      </div>
+      <div class="note">
+        <h3>住宿完整地址</h3>
+        <p><a href="https://www.google.com/maps/search/?api=1&query=33%20Ultimo%20Rd%20Haymarket%20NSW%202000" target="_blank" rel="noopener">33 Ultimo Rd, Haymarket NSW 2000, Australia</a>。迷路時給司機看這行即可。</p>
       </div>
     </div>
     <p class="colophon">時間為雪梨當地時間（AEST, UTC+10）。工作時段以外的行程為彈性安排，可依天氣與體力調整。</p>
@@ -761,6 +817,7 @@ DAYS.forEach((day, idx) => {
       <span class="day-date">${day.d}</span>
       <span class="day-dow">${day.dow}</span>
       <span class="day-title">${day.title}</span>
+      <span class="wx" id="wx-${idx}" title="雪梨當日天氣：最低/最高溫、降雨機率"></span>
       <span class="badge ${day.kind}">${day.badge}</span>
     </div>
     <ul class="items">${items}</ul>
@@ -809,6 +866,63 @@ function tickClocks(){
 }
 tickClocks();
 setInterval(tickClocks, 1000);
+
+/* today + "now" highlighting, Sydney time */
+const TRIP_DATES = DAYS.map(d => "2026-" + d.d.replace("/", "-"));
+const sydFmt = new Intl.DateTimeFormat("en-GB", {
+  timeZone:"Australia/Sydney", year:"numeric", month:"2-digit", day:"2-digit",
+  hour:"2-digit", minute:"2-digit", hour12:false
+});
+function sydNow(){
+  const p = Object.fromEntries(sydFmt.formatToParts(new Date()).map(x => [x.type, x.value]));
+  return { date:`${p.year}-${p.month}-${p.day}`, h:+p.hour + p.minute/60 };
+}
+let scrolledToToday = false;
+function updateNow(){
+  const now = sydNow();
+  const idx = TRIP_DATES.indexOf(now.date);
+  cards.forEach(c => c.classList.remove("today"));
+  links.forEach(a => a.classList.remove("today"));
+  document.querySelectorAll(".item.now, .item.next").forEach(el => el.classList.remove("now", "next"));
+  if (idx === -1) return;
+  cards[idx].classList.add("today");
+  links[idx].classList.add("today");
+  const els = cards[idx].querySelectorAll(".item");
+  const cur = DAYS[idx].items.findIndex(it => hm(it.s) <= now.h && now.h < hm(it.e));
+  if (cur !== -1) els[cur].classList.add("now");
+  else {
+    const nxt = DAYS[idx].items.findIndex(it => hm(it.s) > now.h);
+    if (nxt !== -1) els[nxt].classList.add("next");
+  }
+  if (!scrolledToToday && !location.hash){
+    scrolledToToday = true;
+    cards[idx].classList.add("in");
+    cards[idx].scrollIntoView({ behavior: reduce ? "auto" : "smooth", block:"start" });
+  }
+}
+updateNow();
+setInterval(updateNow, 60000);
+
+/* daily weather (Open-Meteo, no key) */
+(async () => {
+  const ICON = {0:"☀️",1:"🌤️",2:"⛅️",3:"☁️",45:"🌫️",48:"🌫️",51:"🌦️",53:"🌦️",55:"🌦️",
+    61:"🌧️",63:"🌧️",65:"🌧️",66:"🌧️",67:"🌧️",71:"🌨️",73:"🌨️",75:"🌨️",77:"🌨️",
+    80:"🌦️",81:"🌧️",82:"⛈️",85:"🌨️",86:"🌨️",95:"⛈️",96:"⛈️",99:"⛈️"};
+  try {
+    const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=-33.8688&longitude=151.2093&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Australia%2FSydney&forecast_days=16");
+    if (!r.ok) return;
+    const w = (await r.json()).daily;
+    TRIP_DATES.forEach((date, i) => {
+      const k = w.time.indexOf(date);
+      const el = document.getElementById("wx-" + i);
+      if (k === -1 || !el) return;
+      el.textContent = `${ICON[w.weather_code[k]] || ""} ${Math.round(w.temperature_2m_min[k])}°/${Math.round(w.temperature_2m_max[k])}° 💧${w.precipitation_probability_max[k]}%`;
+    });
+  } catch (e) { /* offline: SW serves the last cached forecast, or stays blank */ }
+})();
+
+/* offline support */
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
 </script>
 </body>
 </html>
