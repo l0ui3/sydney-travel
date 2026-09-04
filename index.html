@@ -337,8 +337,8 @@ h2{font-size:1.5rem}
 }
 .day-foot .label{color:var(--ink-3); white-space:nowrap}
 .day-foot.wear{color:var(--ink-2)}
-.day-foot.wear.cold{background:var(--ferry-soft); color:var(--ink); border-top-color:var(--ferry)}
-.day-foot.wear.cold .label{color:var(--ferry); font-weight:600}
+.day-foot.wear.hl{background:var(--ferry-soft); color:var(--ink); border-top-color:var(--ferry)}
+.day-foot.wear.hl .label{color:var(--ferry); font-weight:600}
 
 /* ---------- weather ---------- */
 .wx{font-family:var(--f-mono); font-size:.76rem; color:var(--ink-2); white-space:nowrap}
@@ -576,7 +576,7 @@ const DAYS = [
     ]},
 
   { d:"09/04", dow:"週五", kind:"work", badge:"工作日 1", title:"抵達 · 歌劇院導覽 · 港區辦公",
-    wear:"清晨落地涼、中午回暖近 20°C，溫差約 10°C：長袖加防風外套，港邊風大。歌劇院與植物園多走路，穿好走的鞋。",
+    wear:"清晨落地約 13°C、午後回暖到 22°C，整天晴朗無雨。長袖加一件薄外套即可，港邊陣風近 40 km/h 會涼。歌劇院與植物園多走路，穿好走的鞋。",
     foot:"落地即開工的一天：上午看完最經典的港灣，下午在港區 Cafe 開工、傍晚進房。",
     items:[
       { s:"06:15", e:"07:45", cat:"transit", time:"06:15", to:"07:45",
@@ -616,7 +616,7 @@ const DAYS = [
     ]},
 
   { d:"09/05", dow:"週六", kind:"off", badge:"放假日 1", title:"藍山＋Sydney Zoo 一日遊 · 煙火海鮮大餐",
-    wear:"預報這天市區近 30°C 但風大，藍山比同時間市區低約 10°C：中午到 Echo Point 約 17–19°C、陣風 30 km/h 以上、有五成陣雨機率。防風防雨外套＋一件薄保暖層，穿防滑好走的鞋；下山回市區會熱，層次要方便脫。傍晚可能有冷鋒過境，渡輪與看煙火時風大轉涼，外套別收起來。", cold:true,
+    wear:"預報大改：這天是強風日而不是冷天。市區午後飆到 31°C、西北風陣風可達 80 km/h；藍山中午約 20–22°C 不冷，但 Echo Point 懸崖邊陣風預估 80–100 km/h，帽子、太陽眼鏡要抓緊，觀景台別靠欄杆太近，長髮綁起來。雨主要在 16:00 之後（約兩成機率、雨量小），帶輕便防風外套當雨具即可，不必厚保暖層。傍晚渡輪與 19:00–21:00 看煙火時仍 23–25°C、陣風約 50 km/h：不冷但風大，外套防風用。注意強風可能影響渡輪或煙火，出門前再確認一次。", alert:"💨",
     foot:"整天不開電腦：跟團上藍山，傍晚搭落日渡輪回港，晚上煙火配海鮮。",
     items:[
       { s:"07:15", e:"07:30", cat:"transit", time:"07:15", to:"07:30",
@@ -647,7 +647,7 @@ const DAYS = [
     ]},
 
   { d:"09/06", dow:"週日", kind:"off", badge:"放假日 2", title:"舊政府大廈 · NRL 球賽 · 牛排晚餐",
-    wear:"白天約 20°C 舒適，Parramatta 內陸早晚更涼。NRL 傍晚開賽，露天球場入夜降到 15°C 左右，帶一件保暖外套。",
+    wear:"冷鋒過後轉晴涼：市區 15–22°C、無雨，但上午西南風陣風仍近 45 km/h。Parramatta 傍晚 17°C，NRL 開賽後降到 15–16°C，露天球場帶一件保暖外套。",
     foot:"週日大眾運輸每日上限只要 AUD $2.80，放心多搭幾趟。",
     items:[
       { s:"11:00", e:"12:15", cat:"sight", time:"11:00", to:"12:15",
@@ -681,7 +681,7 @@ const DAYS = [
     ]},
 
   { d:"09/07", dow:"週一", kind:"work", badge:"工作日 2", title:"世界遺產雙踩點：鸚鵡島＋海德公園兵營",
-    wear:"轉涼且可能有雨：鸚鵡島全程露天、渡輪風大，防風防雨外套必備，防曬也要。回市區工作後可換薄一點。",
+    wear:"12–21°C、約兩成半機率有零星小雨，陣風近 60 km/h：鸚鵡島全程露天、渡輪甲板風大，防風外套必備，帶輕便雨具，防曬也要。回市區工作後可換薄一點。",
     foot:"上午連跑兩個世界遺產，中午前回房開工。",
     items:[
       { s:"08:15", e:"10:45", cat:"sight", time:"08:15", to:"10:45",
@@ -705,7 +705,7 @@ const DAYS = [
     ]},
 
   { d:"09/08", dow:"週二", kind:"work", badge:"工作日 3", title:"邦代海灘懸崖絕景 Brunch",
-    wear:"本週最涼的一天，高溫不到 17°C 且有降雨機率；邦代海風強，體感再低 2–3°C。長袖加防風外套、太陽眼鏡，懸崖步道穿好走的鞋。",
+    wear:"轉涼：12–17°C、多雲，約兩成半降雨機率；邦代海風陣風超過 50 km/h，體感再低 2–3°C。長袖加防風外套、太陽眼鏡，懸崖步道穿好走的鞋。",
     foot:"333 公車直達，早餐吃在海景第一排。",
     items:[
       { s:"08:15", e:"09:10", cat:"transit", time:"08:15", to:"09:10",
@@ -732,7 +732,7 @@ const DAYS = [
     ]},
 
   { d:"09/09", dow:"週三", kind:"work", badge:"工作日 4", title:"Single O · Paddington · 古蹟酒吧",
-    wear:"早上約 10°C、午後 17°C，可能有雨。洋蔥式穿法方便脫，帶輕便雨具；Paddington 石板路多，好走的鞋。",
+    wear:"本週最涼、最可能下雨的一天：早上約 10°C、午後 16°C，降雨機率四成多，陣風近 60 km/h。洋蔥式穿法方便脫，帶輕便雨具；Paddington 石板路多，好走的鞋。",
     foot:"雪梨咖啡文化的主場，晚上到岩石區喝自釀啤酒。",
     items:[
       { s:"08:30", e:"09:45", cat:"sight", time:"08:30", to:"09:45",
@@ -755,7 +755,7 @@ const DAYS = [
     ]},
 
   { d:"09/10", dow:"週四", kind:"work", badge:"工作日 5", title:"QVB 與當代藝廊 · Bistecca 牛排",
-    wear:"多半在室內（QVB、畫廊、餐廳），輕便即可；Bistecca 是正式牛排館，帶一件像樣的外套或襯衫。",
+    wear:"11–16°C 多雲、降雨機率低。多半在室內（QVB、畫廊、餐廳），外面走動加一件外套；Bistecca 是正式牛排館，帶一件像樣的外套或襯衫。",
     foot:"白天室內行程剛好躲雨，晚上是本趟的重點大餐。",
     items:[
       { s:"08:30", e:"10:00", cat:"sight", time:"08:30", to:"10:00",
@@ -778,7 +778,7 @@ const DAYS = [
     ]},
 
   { d:"09/11", dow:"週五", kind:"work", badge:"工作日 6", title:"現剖生蠔海鮮盛宴 · 最後工作日",
-    wear:"早上約 10°C、午後回暖近 20°C。魚市場海邊風涼、地面濕滑，穿防滑鞋；O Bar 47 樓有 smart casual 服裝要求，避免短褲、拖鞋與運動服。",
+    wear:"早上約 12°C、午後 17°C，多雲少雨、風小，是本週最平靜的一天。魚市場海邊地面濕滑，穿防滑鞋；O Bar 47 樓有 smart casual 服裝要求，避免短褲、拖鞋與運動服。",
     foot:"工作結束後先打包，隔天清晨只剩退房。",
     items:[
       { s:"08:30", e:"11:30", cat:"sight", time:"08:30", to:"11:30",
@@ -797,7 +797,7 @@ const DAYS = [
     ]},
 
   { d:"09/12", dow:"週六", kind:"fly", badge:"返航日", title:"早班機返航",
-    wear:"清晨 05:30 出門約 11°C，穿外套上車；機艙與吉隆坡 32°C 溫差大，方便脫的層次最實用。",
+    wear:"晴朗，清晨 05:30 出門約 11°C，穿外套上車；機艙與吉隆坡 32°C 溫差大，方便脫的層次最實用。",
     foot:"05:30 出發前往機場，行程結束。",
     items:[
       { s:"05:30", e:"06:15", cat:"transit", time:"05:30", to:"06:15",
@@ -883,7 +883,7 @@ DAYS.forEach((day, idx) => {
     </div>
     <ul class="items">${items}</ul>
     <div class="day-foot"><span class="label">Note</span><span>${day.foot}</span></div>
-    ${day.wear ? `<div class="day-foot wear${day.cold ? " cold" : ""}"><span class="label">${day.cold ? "❄️ 穿著" : "穿著"}</span><span>${day.wear}</span></div>` : ""}`;
+    ${day.wear ? `<div class="day-foot wear${day.alert ? " hl" : ""}"><span class="label">${day.alert ? `${day.alert} 穿著` : "穿著"}</span><span>${day.wear}</span></div>` : ""}`;
   days.appendChild(sec);
 });
 
